@@ -18,15 +18,13 @@ import { useRouter } from "next/navigation";
 import { UserSubscriptionContext } from "@/app/(context)/UserSubscriptionContext";
 import { TrackCreditUsage } from "@/app/(context)/TrackCreditUsage";
 
-interface PROPS {
-    params: {
-        'template-slug': string
-    }
-}
+function CreateNewContent({
+  params,
+}: {
+  params: { "template-slug": string };
+}) {
 
-function CreateNewContent(props: PROPS) {
-
-    const selectedTemplate: TEMPLATE | undefined = Templates?.find((item) => item.slug === props.params["template-slug"]);
+    const selectedTemplate: TEMPLATE | undefined = Templates?.find((item) => item.slug === params["template-slug"]);
     const [loading, setLoading] = useState(false);
     const [aiOutput, setAiOutput] = useState<string>('');
     const { user } = useUser()
