@@ -8,7 +8,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import { getResponse } from "@/utils/AiModel";
-import { useContext, useState } from "react";
+import { useContext, useState, use } from "react";
 import { db } from "@/utils/db";
 import { AIOutput } from "@/utils/schema";
 import { useUser } from "@clerk/nextjs";
@@ -21,10 +21,10 @@ import { TrackCreditUsage } from "@/app/(context)/TrackCreditUsage";
 function CreateNewContent({
   params,
 }: {
-  params: { "template-slug": string };
+  params: Promise<{ "template-slug": string }>;
 }) {
 
-    const selectedTemplate: TEMPLATE | undefined = Templates?.find((item) => item.slug === params["template-slug"]);
+    const selectedTemplate: TEMPLATE | undefined = Templates?.find((item) => item.slug === use(params)["template-slug"]);
     const [loading, setLoading] = useState(false);
     const [aiOutput, setAiOutput] = useState<string>('');
     const { user } = useUser()
