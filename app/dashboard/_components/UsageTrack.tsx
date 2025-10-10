@@ -46,7 +46,7 @@ function UsageTrack() {
 
     const isUserSubscribed =  async () => {
         const result  = await db.select().from(UserSubscription)
-        .where(and(UserSubscription.active, eq(UserSubscription.email, user?.primaryEmailAddress?.emailAddress)));
+        .where(and(UserSubscription.active, eq(UserSubscription.email, user!.primaryEmailAddress!.emailAddress)));
 
         console.log(result)
 
