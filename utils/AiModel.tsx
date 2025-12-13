@@ -6,7 +6,7 @@ export async function getResponse(userPrompt: string) {
   });
 
   const response = await ai.models.generateContent({
-    model: "gemini-2.0-flash",
+    model: "gemini-2.5-flash",
     contents: userPrompt,
     config: {
       candidateCount: 2

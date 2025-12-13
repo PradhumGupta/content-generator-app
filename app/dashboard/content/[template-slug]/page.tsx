@@ -32,10 +32,11 @@ function CreateNewContent({
     const router = useRouter()
     const {userSubscription, setUserSubscription} = useContext(UserSubscriptionContext)
     const {creditUsage, setCreditUsage} = useContext(TrackCreditUsage)
+    const superUser = process.env.NEXT_PUBLIC_SUPERUSER_EMAIL === user?.primaryEmailAddress?.emailAddress
 
     const GenerateAIContent = async (formData: any) => {
 
-        if(totalUsage >= 10000 && !userSubscription) {
+        if(totalUsage >= 10000 && !userSubscription && !superUser) {
             alert("Free Credits used. Upgrade to access more content")
             router.push('/dashboard/billing')
             return;
