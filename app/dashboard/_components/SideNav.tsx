@@ -1,9 +1,7 @@
 "use client";
 import { FileClock, Home, Settings, WalletCards } from "lucide-react"
-import Image from "next/image"
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect } from "react";
 import UsageTrack from "./UsageTrack";
 
 function SideNav() {
@@ -32,36 +30,48 @@ function SideNav() {
     ]
 
     const path = usePathname();
-    useEffect(() => {
-        console.log(path);
-    }, []);
 
   return (
-    <div className="max-w-3xl h-screen relative p-5 shadow-sm border">
-        <div className="flex justify-center">
-            <Image src={'./logo.svg'} alt="logo" width={60} height={50} />
-        </div>
+    <aside className="flex h-screen flex-col border-r border-gray-200 bg-white px-5 py-6">
+        <Link href="/" className="flex items-center gap-3 px-2">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-black text-sm font-bold text-white">
+                AI
+            </div>
+            <div>
+                <p className="text-lg font-semibold leading-none">PromptStack</p>
+                <p className="mt-1 text-xs font-semibold uppercase tracking-[0.2em] text-gray-500">
+                    Studio
+                </p>
+            </div>
+        </Link>
 
-        <hr className="my-6 border" />
+        <div className="my-6 h-px bg-gray-200" />
 
-        <div className="mt-4">
-            {MenuList.map((menu, index) => (
-                <div key={index} className={`flex gap-2 mb-2 p-3
-                    hover:bg-primary hover:text-white rounded-lg
-                    cursor-pointer items-center
-                    ${path == menu.path && 'bg-primary text-white'}
-                `}>
-                    <Link href={menu.path} className="flex gap-2">
-                        <menu.icon className="h-6 w-6" />
-                        <h2 className="text-lg">{menu.name}</h2>
+        <nav className="space-y-2">
+            {MenuList.map((menu, index) => {
+                const Icon = menu.icon;
+                const isActive = path === menu.path || (menu.path === "/dashboard" && path.startsWith("/dashboard/content"));
+
+                return (
+                    <Link
+                        href={menu.path}
+                        key={index}
+                        className={`flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-semibold transition ${
+                            isActive
+                                ? "bg-black text-white"
+                                : "text-gray-600 hover:bg-gray-100 hover:text-black"
+                        }`}
+                    >
+                        <Icon className="h-5 w-5" />
+                        <span>{menu.name}</span>
                     </Link>
-                </div>
-            ))}
-        </div>
-        <div className="absolute bottom-10 left-0 w-full">
+                );
+            })}
+        </nav>
+        <div className="mt-auto pt-6">
             <UsageTrack />
         </div>
-    </div>
+    </aside>
   )
 }
 

@@ -13,15 +13,20 @@ function OutputSection({aiOutput}: props) {
   const editorRef: any = useRef(null);
 
   useEffect(() => {
-    const editorInstance = editorRef.current.getInstance();
-    editorInstance.setMarkdown(aiOutput);
+    const editorInstance = editorRef.current?.getInstance();
+    editorInstance?.setMarkdown(aiOutput);
   }, [aiOutput]);
 
   return (
-    <div className="bg-card shadow-md border rounded-lg">
-      <div className="flex justify-between items-center p-5">
-        <h2 className="font-medium text-lg">Your Result</h2>
-        <Button className="flex gap-4" onClick={() => navigator.clipboard.writeText(aiOutput)}>
+    <section className="overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-sm">
+      <div className="flex items-center justify-between gap-4 border-b border-gray-200 p-5">
+        <div>
+          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-gray-500">
+            Generated Output
+          </p>
+          <h2 className="mt-2 text-2xl font-black tracking-tight">Your Result</h2>
+        </div>
+        <Button className="flex rounded-2xl bg-black px-5 font-semibold text-white hover:bg-gray-800" onClick={() => navigator.clipboard.writeText(aiOutput)}>
           <Copy className="w-4 h-4" /> Copy
         </Button>
       </div>
@@ -32,7 +37,7 @@ function OutputSection({aiOutput}: props) {
         useCommandShortcut={true}
         onChange={() => console.log(editorRef.current.getInstance().getMarkdown())}
       />
-    </div>
+    </section>
   );
 }
 

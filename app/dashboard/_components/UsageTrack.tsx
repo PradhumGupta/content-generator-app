@@ -10,6 +10,7 @@ import { HISTORY } from '../history/page'
 import { TotalUsageContext } from '@/app/(context)/TotalUsageContext';
 import { UserSubscriptionContext } from '@/app/(context)/UserSubscriptionContext';
 import { TrackCreditUsage } from '@/app/(context)/TrackCreditUsage';
+import Link from 'next/link';
 
 function UsageTrack() {
 
@@ -48,26 +49,38 @@ function UsageTrack() {
         const result  = await db.select().from(UserSubscription)
         .where(and(UserSubscription.active, eq(UserSubscription.email, user!.primaryEmailAddress!.emailAddress)));
 
-        console.log(result)
-
         if(result.length) {
             setUserSubscription(true)
             setMaxWords(1000000)
         }
     }
 
+    const usagePercent = Math.min(100, Math.round((Number(totalUsage) / maxWords) * 100));
 
   return (
-    <div className='m-5'>
-        <div className='bg-primary text-white p-3 rounded-lg'>
-            <h2 className='font-medium'>Credits</h2>
-            <div className='h-2 bg-gray-700 w-full rounded-full mt-3'>
-                <div className={`h-2 bg-secondary rounded-full w-[calc(${(totalUsage / maxWords) * 100}%)]`}
-                ></div>
+    <div>
+        <div className='rounded-3xl bg-black p-5 text-white'>
+            <div className="flex items-center justify-between gap-3">
+                <h2 className='font-semibold'>Credits</h2>
+                <span className="rounded-full bg-white/10 px-3 py-1 text-xs font-semibold">
+                    {usagePercent}%
+                </span>
             </div>
-            <p className='text-sm my-2'>{totalUsage}/{maxWords} credits used</p>
+            <div className='mt-4 h-2 w-full rounded-full bg-white/10'>
+                <div
+                    className="h-2 rounded-full bg-white transition-all"
+                    style={{ width: `${usagePercent}%` }}
+                />
+            </div>
+            <p className='mt-3 text-xs leading-5 text-gray-400'>
+                {Number(totalUsage).toLocaleString()}/{maxWords.toLocaleString()} credits used
+            </p>
         </div>
-        {!userSubscription && <Button variant={"link"} className='w-full my-3 text-primary'>Upgrade</Button>}
+        {!userSubscription && (
+            <Button asChild variant={"outline"} className='mt-3 w-full rounded-2xl border-gray-200 bg-white text-black hover:bg-gray-100'>
+                <Link href="/dashboard/billing">Upgrade</Link>
+            </Button>
+        )}
     </div>
   )
 }

@@ -69,11 +69,15 @@ function CreateNewContent({
 
 
   return (
-    <div className="bg-secondary p-5">
-        <Link href={'/dashboard'}>
-            <Button><ArrowLeft /> Back</Button>
-        </Link>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 py-5">
+    <div className="min-h-screen bg-gray-50">
+      <div className="mx-auto max-w-7xl px-6 py-8">
+        <Button asChild variant="outline" className="rounded-2xl border-gray-200 bg-white px-5 py-5 text-sm font-semibold hover:bg-gray-100">
+          <Link href={'/dashboard'}>
+            <ArrowLeft className="h-4 w-4" /> Back
+          </Link>
+        </Button>
+
+        <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-3">
         {/* FormSection */}
         <FormSection selectedTemplate={selectedTemplate} userFormInput={(v:any) => GenerateAIContent(v)} loading={loading} />
 
@@ -83,6 +87,7 @@ function CreateNewContent({
         </div>
         
         </div>
+      </div>
     </div>
   )
 }

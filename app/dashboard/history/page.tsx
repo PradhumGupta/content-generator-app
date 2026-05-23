@@ -31,10 +31,10 @@ async function Page() {
     return {
       id: r.id,
       icon: template?.icon as string,
-      name: template?.name,
+      name: template?.name?.replace(/-/g, " ") || r.templateSlug,
       aiResponse: r.aiResponse,
       date: r.createdAt,
-      words: r.aiResponse!.trim().split(/\s+/).length,
+      words: r.aiResponse ? r.aiResponse.trim().split(/\s+/).filter(Boolean).length : 0,
     };
   });
 
@@ -46,47 +46,58 @@ async function Page() {
 
 
   return (
-    <div className="min-h-screen bg-gray-100 p-4">
-      <div className="min-h-screen w-full bg-white shadow-lg rounded-md overflow-hidden p-6">
-        <h2 className="text-3xl font-bold">History</h2>
-        <p className="text-gray-400 text-sm mb-4">
-          Search your previously generated AI content
-        </p>
+    <div className="min-h-screen bg-gray-50">
+      <div className="mx-auto max-w-7xl px-6 py-10">
+        <div className="mb-8">
+          <h1 className="text-4xl font-black tracking-tight">
+            Generated Content History
+          </h1>
+          <p className="max-w-2xl text-md leading-8 text-gray-600">
+            Revisit previous generations and copy useful technical outputs.
+          </p>
+        </div>
+
         {/* Table container */}
-        <table className="min-w-full my-6">
-          <thead>
-            <tr>
-              {columns.map((column, index) => (
-                <th
-                  key={index}
-                  className="px-5 py-3 border-b-2 border-gray-200 bg-gray-50 text-left text-xs font-bold text-gray-600 uppercase"
-                >
-                  {column}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {data.map((row) => (
-              <tr key={row.id} className="hover:bg-gray-100 transition-colors duration-200">
-                <td className="px-5 py-5 text-sm align-middle">
-                    <div className="flex gap-2">
-                  <Image src={row.icon} alt="" width={20} height={20} className="rounded-full" />
-                  <span>{row.name}</span>
-                  </div>
-                </td>
-                <td className="px-5 py-5 text-sm line-clamp-3 align-middle">
-                  {row.aiResponse}
-                </td>
-                <td className="px-5 py-5 text-sm align-middle">{row.date}</td>
-                <td className="px-5 py-5 text-sm align-middle">{row.words}</td>
-                <td className="px-5 py-5 text-sm align-middle">
-                  <ToCopy output={row.aiResponse || ""} />
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <div className="overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-sm">
+          <div className="overflow-x-auto">
+            <table className="min-w-full">
+              <thead>
+                <tr>
+                  {columns.map((column, index) => (
+                    <th
+                      key={index}
+                      className="border-b border-gray-200 bg-gray-50 px-5 py-4 text-left text-xs font-bold uppercase tracking-[0.16em] text-gray-500"
+                    >
+                      {column}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {data.map((row) => (
+                  <tr key={row.id} className="border-b border-gray-100 transition-colors duration-200 last:border-0 hover:bg-gray-50">
+                    <td className="px-5 py-5 text-sm align-middle">
+                        <div className="flex min-w-56 items-center gap-3">
+                      {row.icon && <Image src={row.icon} alt="" width={28} height={28} className="rounded-full" />}
+                      <span className="font-semibold text-black">{row.name}</span>
+                      </div>
+                    </td>
+                    <td className="px-5 py-5 align-middle">
+                      <p className="max-w-xl line-clamp-3 text-sm leading-6 text-gray-600">
+                        {row.aiResponse}
+                      </p>
+                    </td>
+                    <td className="px-5 py-5 text-sm text-gray-600 align-middle">{row.date}</td>
+                    <td className="px-5 py-5 text-sm font-semibold align-middle">{row.words}</td>
+                    <td className="px-5 py-5 text-sm align-middle">
+                      <ToCopy output={row.aiResponse || ""} />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </div>
   );
